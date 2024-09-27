@@ -1,0 +1,69 @@
+ALTER 1: 
+ALTER TABLE producto ADD categoria VARCHAR(50);
+
+ALTER 2: 
+ALTER TABLE cliente MODIFY telefono VARCHAR(20);
+
+
+
+SELECT 1:
+SELECT nombre_producto, precio, stock 
+FROM producto 
+WHERE tienda_ID = 1;
+
+σ Tienda_ID=1(πNombre_producto,Precio,Stock(Producto))
+
+SELECT 2 (JOIN):
+SELECT P.pedido_ID, C.nombre_cliente, Pr.nombre_producto, P.cantidad, P.precio_total 
+FROM Pedido P 
+JOIN cliente C ON P.cliente_ID = C.cliente_ID
+JOIN producto Pr ON P.producto_ID = Pr.producto_ID
+WHERE C.cliente_ID = 2;
+
+σCliente_ID=2(πPedido_ID,Nombre_cliente,Nombre_producto,Cantidad,Precio_total((Pedido⋈Cliente)⋈producto))
+
+
+SELECT 3 (JOIN):
+SELECT D.pedido_ID, A.nombre, Pr.nombre_producto, D.entrega_estimada
+FROM detalle_pedido D
+JOIN Pedido P ON D.pedido_ID = P.pedido_ID
+JOIN Producto Pr ON P.producto_ID = Pr.producto_ID
+JOIN Tienda T ON Pr.tienda_ID = T.tienda_ID
+JOIN Artesano A ON T.artesano_ID = A.artesano_ID
+WHERE A.artesano_ID = 3;
+
+σArtesano_ID=3(πPedido_ID,Nombre,Nombre_producto,Fecha_entrega_estimada(((Detalle_Pedido⋈Pedido)⋈Producto)⋈Tienda⋈Artesano))
+
+UPDATE 1:
+UPDATE producto 
+SET stock = stock - 1 
+WHERE producto_ID = 5;
+
+UPDATE 2:
+UPDATE detalle_Pedido 
+SET estado_pedido = 'Entregado'
+WHERE pedido_ID = 7;
+
+INSERT 1:
+INSERT INTO cliente (nombre_cliente, correo_electronico, telefono, direccion)
+VALUES ('Juan Perez', 'juanperez@mail.com', '555-1234', 'Calle Falsa 123');
+
+INSERT 2:
+INSERT INTO producto (tienda_ID, nombre_producto, descripcion,precio, stock, fecha_agregado)
+VALUES (1, 'Escultura de Madera', 'Escultura artesanal de madera', 500, 10, '2024-09-26');
+
+INSERT 3:
+INSERT INTO pedido (producto_ID, cliente_ID, cantidad, precio_total)
+VALUES (5, 2, 1, 500);
+
+DELETE 1:
+DELETE FROM cliente 
+WHERE cliente_ID = 3;
+
+DELETE 2:
+DELETE FROM producto 
+WHERE stock = 0;
+
+
+DROP 1:
+DROP TABLE tienda;
